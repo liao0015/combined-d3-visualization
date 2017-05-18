@@ -2,12 +2,9 @@
 
 The sample data is directly loaded into the browser from "bio.csv".
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Design and user interaction
 
 ```markdown
-
 # Basic user interaction
 
 - wheel scrolling: zoom in and out
