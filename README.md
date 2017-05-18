@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+## Welcome to taxonomy visualization using d3.js
 
-You can use the [editor on GitHub](https://github.com/liao0015/combined-d3-visualization/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+The sample data is directly loaded into thebrowser from "bio.csv".
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+
 
 ### Markdown
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
 ```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+# Basic user interaction
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+- wheel scrolling: zoom in and out
+- hold and drag: move the graph around
+- hover: show numeric data
+- click: show enlarged bar chart for comparison
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Check out the sample page at [Interactive sample page](https://liao0015.github.io/combined-d3-visualization/).
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/liao0015/combined-d3-visualization/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+### More examples from d3
 
-### Support or Contact
+Check out Mike Bostock’s Blocks [examples and resources](https://bl.ocks.org/mbostock).
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+### Licence
+
+MIT Licence [MIT](https://opensource.org/licenses/MIT).
