@@ -1,8 +1,6 @@
 ## Welcome to taxonomy visualization using d3.js
 
-The sample data is directly loaded into thebrowser from "bio.csv".
-
-
+The sample data is directly loaded into the browser from "bio.csv".
 
 ### Markdown
 
