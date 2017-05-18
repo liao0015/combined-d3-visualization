@@ -1,0 +1,106 @@
+*{
+	font-family: 'Roboto', 'Open Sans', 'Roboto Condensed', 'Open Sans Condensed', sans-serif;
+	font-size: 1em;
+}
+
+html{
+	height:100%;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  padding-bottom: 10rem;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/*************** header***************/
+div.header{
+	font-size: 1.5em;
+	background-color: #E1F5FE;
+	padding: 1.0rem 0;
+	margin: 0;
+}
+
+.header img{
+	height: 60px; /*vertically center the logo*/
+	float: left;
+	margin-left: 20px;
+}
+.header h2{
+	display: inline-block;
+	margin-left: 20%;
+}
+
+div#spacer{
+	width:100%;
+	height: 40px;
+}
+
+/*style of output*/
+div#output{
+	margin-top: 2%;
+	margin-bottom: 2%;
+}
+
+div#dropdown-menu select{
+	margin-left: 590px;
+}
+
+
+/****************Footer****************/
+.footer{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding: 1.2rem;
+	color: #01579B;
+	background-color: #E1F5FE;
+	text-align: center;
+}
+
+#help, #privacy{
+	cursor: pointer;
+	/*float: right;
+	margin-right: 20px;*/
+}
+
+#help:hover, #privacy:hover{
+	color: #0091EA;
+}
+
+/****************tree style****************/
+.node circle {
+  fill: #999;
+}
+
+.node text {
+  font: 10px sans-serif;
+}
+
+.node--internal circle {
+  fill: #555;
+}
+
+.node--internal text {
+  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: #555;
+  stroke-opacity: 0.4;
+  stroke-width: 1.5px;
+  /*stroke-linejoin: round;*/
+  stroke-linecap: round;
+}
+
+.link path:hover{
+	stroke: red;
+}
+
+
+
