@@ -1,45 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Tree Chart</title>
-	<script src="d3.js"></script>
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300|Roboto|Roboto+Condensed" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Taxon Visualization</title>
+    <script src="d3.v4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bulma.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300|Roboto|Roboto+Condensed" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 </head>
 <body>
+    <!-- Header section -->
+    <section class="hero is-info">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h2 class="title">Taxonomy Visualization</h2>
+                <h2 class="subtitle">Tree chart as primary display</h2>
+            </div>
+        </div>
 
-	<!-- Header -->
-	<div class="header">
-		<h2>Taxonomy Visualization</h2>
-	</div><!-- END Header -->
+        <div class="hero-foot">
+            <nav class="tabs is-boxed is-fullwidth">
+                <div class="container">
+                <ul>
+                    <li class="is-active"><a>Overview</a></li>
+                    <li><a>Modifiers</a></li>
+                    <li><a>Grid</a></li>
+                </ul>
+                </div>
+            </nav>
+        </div>
+    </section>
 
-	<div>
-		<div id="pal"></div>
-		<section style="margin-left: 20px; display: flex;">
-			<div id="joy" style="display: inline-block;">
-			</div>
-			<div style="margin: 40px; padding: 40px;">
-				<div style="background-color: orange; padding: 20px; border-radius:10px;">click a chart above to compare</div>
-			</div>
-			<div id="peace">	
-			</div>
-		</section>
-	</div>
+    <!-- Main section -->
+    <section class="section">
+        <div id="display-wrapper">
+            <!-- main chart display section -->
+            <div id="display-container"></div>
+            <!-- menu -->
+            <div id="menu-container">
+                <h2 class="title">Menu</h2>
+                <div class="dropdown is-active" id="dropdown-btn">
+                    <div class="dropdown-trigger">
+                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span>Switch chart types</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                        </button>
+                    </div>
+                    <div class="dropdown-menu" role="menu">
+                        <div class="dropdown-content hidden" id="dropdown-menu">
+                            <a class="dropdown-item" value="fullchart">Full chart</a>
+                            <a class="dropdown-item" value="treechart">Tree chart</a>
+                            <a class="dropdown-item" value="clickabletree">Clickable Tree</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- zoom in and comparison section -->
+    <section class="section">
+        <div id="joy" style="display: inline-block;"></div>
+        <div style="margin: 40px; padding: 40px;">
+            <div style="background-color: orange; padding: 20px; border-radius:10px;">click a chart above to compare</div>
+        </div>
+        <div id="peace"></div>
+    </section>
 
 	<!-- Footer section -->
-	<div class="footer">
-		<div style="width:30%; float:left; padding-top: 3%;">
-			<span>Metalab Copyright@2016</span>
-		</div>
-		<div style="width:30%; float:left;">
-			<div style="padding-top: 5%; text-align: left;" id="help">Help</div>
-			<div style="padding-top: 5%; text-align: left;" id="privacy">Privacy and terms</div>
-		</div>
-		<div style="width:35%; float:left;">
-		</div>
-	</div><!-- END Footer section -->
-
-	<script type="text/javascript" src="index.js"></script>
+	<section class="footer is-info">
+        <div class="container">
+            <div class="content has-text-centered">
+                <div style="width:30%; float:left; padding-top: 3%;">
+                    <span>iMetaLab Copyright@2018</span>
+                </div>
+                <div style="width:30%; float:left;">
+                    <div style="padding-top: 5%; text-align: left;" id="help">Help</div>
+                    <div style="padding-top: 5%; text-align: left;" id="privacy">Privacy and terms</div>
+                </div>
+                <div style="width:35%; float:left;">
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="actions.js"></script>
+    <script src="index.js"></script>
+    <script src="tree.js"></script>
 </body>
 </html>

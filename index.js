@@ -1,109 +1,201 @@
 
-showTree(); //show the tree based on "bio.csv"
-showJoy(); //a stand alone bar chart for comparioson purpose
 
-function showTree(){
-	var svg = d3.select("#pal").append("svg");
-	var width = 1200,
-		height = 900;
+//////////////////////////////////////////////////////////////////////////////////
+// show Tree chart only
+//////////////////////////////////////////////////////////////////////////////////
+
+function showTreeChart(data){
+    d3.select("#display-container").selectAll("*").remove();
+	var svg = d3.select("#display-container").append("svg");
+	var width = 960,
+		height = 960;
 
 	var color = d3.scaleOrdinal(d3.schemeCategory10);
-	var ng = svg.append("g").attr("transform", "translate(60,150)");
+	var ng = svg.append("g").attr("transform", "translate(100,150)");
 
 	svg.attr("width", width)
 		.attr("height", height);
 
-	d3.csv("bio.csv", function(error,data){
-		console.log(data);
-		//console.log(error);
-		var tree = d3.tree()
-	    .size([height -200, width - 240]);
+    var tree = d3.tree()
+    .size([height -200, width - 240]);
 
-		var stratify = d3.stratify()
-	    	.parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
+    var stratify = d3.stratify()
+        .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
 
-	  	var root = stratify(data)
-			.sort(function(a, b) { return (a.height - b.height) || a.id.localeCompare(b.id); });
-		//console.log(tree(root).descendants().slice(1));
-	    var link = ng.selectAll(".link")
-			.data(tree(root).descendants().slice(1))
-			.enter().append("path")
-			.attr("class", "link")
-			.style("stroke", function(d){
-				return color(d.depth >= 1 && d.id.split(".", 2));
-			})
-			.style("stroke-width", function(d){
-				//console.log(d);
-				return (d.data.value)/10; })
-			.attr("onmouseover", "MakeTransparent(evt)")
-			.attr("onmouseout", "MakeOpaque(evt)")
-			.attr("d", function(d) {
-				return "M" + d.y + "," + d.x
-			    + "C" + (d.y + d.parent.y) / 2 + "," + d.x
-			    + " " + (d.y + d.parent.y) / 2 + "," + d.parent.x
-			    + " " + d.parent.y + "," + d.parent.x;
-			});
-		//console.log(root.descendants());
-		//var lash = root.descendants();//array
-		var node = ng.selectAll(".node")
-			.data(root.descendants())
-			.enter().append("g")
-			.attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
-			.attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+    var root = stratify(data)
+        .sort(function(a, b) { return (a.height - b.height) || a.id.localeCompare(b.id); });
+    //console.log(tree(root).descendants().slice(1));
+    var link = ng.selectAll(".link")
+        .data(tree(root).descendants().slice(1))
+        .enter().append("path")
+        .attr("class", "link")
+        .style("stroke", function(d){
+            return color(d.depth >= 1 && d.id.split(".", 2));
+        })
+        .style("stroke-width", function(d){
+            //console.log(d);
+            return (d.data.value)/10; })
+        .attr("onmouseover", "MakeTransparent(evt)")
+        .attr("onmouseout", "MakeOpaque(evt)")
+        .attr("d", function(d) {
+            return "M" + d.y + "," + d.x
+            + "C" + (d.y + d.parent.y) / 2 + "," + d.x
+            + " " + (d.y + d.parent.y) / 2 + "," + d.parent.x
+            + " " + d.parent.y + "," + d.parent.x;
+        });
 
-		var circle = node.append("circle")
-			.attr("r", function(d){
-				return (d.data.value)/10;})
-			.style("stroke", function(d){
-				return color(d.depth >= 1 && d.id.split(".", 2));
-			})
-			.style("stroke-width", function(d){
-				return (d.data.value)/50 >= 3 ? 3 : 2;
-			})
-			.style("fill", "transparent")
-			.on("mouseover", function(d){
-				nodeValue.style("opacity", 0.9)
-					.attr("dy", "0.75em")
-					.attr("transform", "translate("+d.y+","+d.x+")")
-					.text(d.data.value);
-		
-			})
-			.on("mouseout", function(d){
-				nodeValue.style("opacity", 0);
-			});
+    var node = ng.selectAll(".node")
+        .data(root.descendants())
+        .enter().append("g")
+        .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
-		var nodeLabel = node.append("text")
-			.attr("dy", 5)
-			.attr("x", function(d) { return d.parent ? (d.data.value)/10+4 : -(d.data.value)/10+4; })
-			.style("text-anchor", function(d) { return d.parent ? "start" : "end"; })
-			.attr("transform", function(d){return d.parent ? "rotate(-30)" : "rotate(0)"; })
-			.text(function(d) { return d.id.substring(d.id.lastIndexOf(".") + 1); });
+    var circle = node.append("circle")
+        .attr("r", function(d){
+            return (d.data.value)/10;})
+        .style("stroke", function(d){
+            return color(d.depth >= 1 && d.id.split(".", 2));
+        })
+        .style("stroke-width", function(d){
+            return (d.data.value)/50 >= 3 ? 3 : 2;
+        })
+        .style("fill", "transparent")
+        .on("mouseover", function(d){
+            nodeValue.style("opacity", 0.9)
+                .attr("dy", "0.75em")
+                .attr("transform", "translate("+d.y+","+d.x+")")
+                .text(d.data.value);
+    
+        })
+        .on("mouseout", function(d){
+            nodeValue.style("opacity", 0);
+        });
 
-		//draw bar chart for each node
-		node.each(showLotsJoy);
+    var nodeLabel = node.append("text")
+        .attr("dy", 5)
+        .attr("x", function(d) { return d.parent ? (d.data.value)/10+4 : -(d.data.value)/10+4; })
+        .style("text-anchor", function(d) { return d.parent ? "start" : "end"; })
+        .attr("transform", function(d){return d.parent ? "rotate(-30)" : "rotate(0)"; })
+        .text(function(d) { return d.id.substring(d.id.lastIndexOf(".") + 1); });
 
-		//show node value upon hover
-		var nodeValue = ng.append("text")
-			.style("text-anchor", "middle")
-			.style("font-size", 35)
-			.style("opacity", 0)
-			.style("pointer-events", "none");
+    //show node value upon hover
+    var nodeValue = ng.append("text")
+        .style("text-anchor", "middle")
+        .style("font-size", 35)
+        .style("opacity", 0)
+        .style("pointer-events", "none");
 
-		//to zoom in
-		svg.call(d3.zoom()
-			.scaleExtent([0, 10])
-			.on("zoom", function(){
-				//link.attr();//gonna figure it out tmr
-				ng.attr("transform", d3.event.transform);
+    //to zoom in
+    svg.call(d3.zoom()
+        .scaleExtent([0, 10])
+        .on("zoom", function(){
+            //link.attr();//gonna figure it out tmr
+            ng.attr("transform", d3.event.transform);
 
-			}));
+        }));
+}
 
-	});
+//////////////////////////////////////////////////////////////////////////////////
+// show full chart (tree and bar charts on each node)
+//////////////////////////////////////////////////////////////////////////////////
+
+function showFullChart(data){
+    d3.select("#display-container").selectAll("*").remove();
+	var svg = d3.select("#display-container").append("svg");
+	var width = 960,
+		height = 960;
+
+	var color = d3.scaleOrdinal(d3.schemeCategory10);
+	var ng = svg.append("g").attr("transform", "translate(100,150)");
+
+	svg.attr("width", width)
+		.attr("height", height);
+
+    var tree = d3.tree()
+    .size([height -200, width - 240]);
+
+    var stratify = d3.stratify()
+        .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
+
+    var root = stratify(data)
+        .sort(function(a, b) { return (a.height - b.height) || a.id.localeCompare(b.id); });
+    //console.log(tree(root).descendants().slice(1));
+    var link = ng.selectAll(".link")
+        .data(tree(root).descendants().slice(1))
+        .enter().append("path")
+        .attr("class", "link")
+        .style("stroke", function(d){
+            return color(d.depth >= 1 && d.id.split(".", 2));
+        })
+        .style("stroke-width", function(d){
+            //console.log(d);
+            return (d.data.value)/10; })
+        .attr("onmouseover", "MakeTransparent(evt)")
+        .attr("onmouseout", "MakeOpaque(evt)")
+        .attr("d", function(d) {
+            return "M" + d.y + "," + d.x
+            + "C" + (d.y + d.parent.y) / 2 + "," + d.x
+            + " " + (d.y + d.parent.y) / 2 + "," + d.parent.x
+            + " " + d.parent.y + "," + d.parent.x;
+        });
+
+    //console.log(root.descendants());
+    //var lash = root.descendants();//array
+    var node = ng.selectAll(".node")
+        .data(root.descendants())
+        .enter().append("g")
+        .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+    var circle = node.append("circle")
+        .attr("r", function(d){
+            return (d.data.value)/10;})
+        .style("stroke", function(d){
+            return color(d.depth >= 1 && d.id.split(".", 2));
+        })
+        .style("stroke-width", function(d){
+            return (d.data.value)/50 >= 3 ? 3 : 2;
+        })
+        .style("fill", "transparent")
+        .on("mouseover", function(d){
+            nodeValue.style("opacity", 0.9)
+                .attr("dy", "0.75em")
+                .attr("transform", "translate("+d.y+","+d.x+")")
+                .text(d.data.value);
+    
+        })
+        .on("mouseout", function(d){
+            nodeValue.style("opacity", 0);
+        });
+
+    var nodeLabel = node.append("text")
+        .attr("dy", 5)
+        .attr("x", function(d) { return d.parent ? (d.data.value)/10+4 : -(d.data.value)/10+4; })
+        .style("text-anchor", function(d) { return d.parent ? "start" : "end"; })
+        .attr("transform", function(d){return d.parent ? "rotate(-30)" : "rotate(0)"; })
+        .text(function(d) { return d.id.substring(d.id.lastIndexOf(".") + 1); });
+
+    //draw bar chart for each node
+    node.each(showLotsJoy);
+
+    //show node value upon hover
+    var nodeValue = ng.append("text")
+        .style("text-anchor", "middle")
+        .style("font-size", 35)
+        .style("opacity", 0)
+        .style("pointer-events", "none");
+
+    //to zoom in
+    svg.call(d3.zoom()
+        .scaleExtent([0, 10])
+        .on("zoom", function(){
+            //link.attr();//gonna figure it out tmr
+            ng.attr("transform", d3.event.transform);
+
+        }));
 }
 
 function processData(data){
-
-	var newData = [];
 	var result = [];
 	var newData = [];
 	//console.log(data);
@@ -227,22 +319,11 @@ function showJoy(){
 /****************show bar charts inside each tree node*****************/
 /**********************************************************************/
 function showLotsJoy(data){
+    // console.log(data);
 	var width = 50,
 		height = 50;
 	var color = d3.scaleOrdinal(d3.schemeCategory10);
 	data = processData(data);
-	
-	//process data 
-	// var data1 = Object.keys(data)[0].split(";");
-	// var data2 = Object.values(data)[0].split(";");
-	// console.log(data1);
-	// console.log(data2);
-	// var data = [];
-	// for(var i = 0; i<data1.length; i++){
-	// 	data2[i] = +data2[i];
-	// 	data[i] = {"name":data1[i], "value": data2[i]};
-	// }
-	// console.log(data);
 	
 	var x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
 	var y = d3.scaleLinear().range([height, 0]);
