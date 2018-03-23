@@ -39,6 +39,11 @@ div#menu-container{
 }
 
 /****************tree style****************/
+/* enable each node to be clickable */
+.node {
+    cursor: pointer;
+}
+
 .node circle {
   fill: #999;
 }

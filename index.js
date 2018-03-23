@@ -43,6 +43,8 @@ function showTreeChart(data){
             + " " + (d.y + d.parent.y) / 2 + "," + d.parent.x
             + " " + d.parent.y + "," + d.parent.x;
         });
+    
+    // console.log(link.nodes());
 
     var node = ng.selectAll(".node")
         .data(root.descendants())
