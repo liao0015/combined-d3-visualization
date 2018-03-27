@@ -35,12 +35,13 @@
 
     <!-- Main section -->
     <section class="section">
-        <div id="display-wrapper">
+        <div id="display-wrapper" class="columns">
             <!-- main chart display section -->
-            <div id="display-container"></div>
+            <div id="display-container" class="column is-four-fifths"></div>
             <!-- menu -->
-            <div id="menu-container">
-                <h2 class="title">Menu</h2>
+            <div id="menu-container" class="column">
+                <h2 class="subtitle">Menu</h2>
+                <!-- dropdown menu -->
                 <div class="dropdown is-active" id="dropdown-btn">
                     <div class="dropdown-trigger">
                         <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -56,6 +57,62 @@
                             <a class="dropdown-item" value="treechart">Tree chart</a>
                             <a class="dropdown-item" value="clickabletree">Clickable Tree</a>
                         </div>
+                    </div>
+                </div>
+
+                <!-- hierarchy checkbox list -->
+                <div id="hierarchy-checkbox" style="padding: 20px;">
+                    <div class="field">
+                        <div class="control hierarchy-item">
+                            <label class="checkbox" id="checkbox-root" value="checkbox-root">
+                                <input type="checkbox"/>
+                                Root
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control hierarchy-item">
+                            <label class="checkbox" id="checkbox-child1" value="checkbox-child1">
+                                <input type="checkbox"/>
+                                Child One
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control hierarchy-item">
+                            <label class="checkbox" id="checkbox-child2" value="checkbox-child2">
+                                <input type="checkbox"/>
+                                Child Two
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control hierarchy-item">
+                            <label class="checkbox" id="checkbox-child3" value="checkbox-child3">
+                                <input type="checkbox"/>
+                                Child Three
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- height slider -->
+                <div>
+                    <div class="slidecontainer">
+                        <input autocomplete="off" type="range" min="660" max="960" value="680" class="slider" id="heightRange" step="20"/>
+                    </div>
+                    <div id="height-slider-output"></div>
+                </div>
+
+                <!-- reset button -->
+                <div style="width: 100%; margin-top: 10px;">
+                    <div style="display: block; margin: 0 auto;">
+                        <a class="button is-info" id="reset-btn">
+                            <span class="icon is-small">
+                                <i class="fa fa-undo"></i>
+                            </span>
+                            <span>Reset</span>
+                        </a>
                     </div>
                 </div>
             </div>

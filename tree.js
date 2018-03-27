@@ -104,13 +104,10 @@ function _clickableTree(data){
     }
 }
 
-function clickableTree(data){
+function clickableTree(data, width, height, margin){
+    //console.log(data);
 
     d3.select("#display-container").selectAll("*").remove();
-
-    var margin = {top: 20, right: 120, bottom: 20, left: 20};
-    var width = 660 - margin.left - margin.right;
-    var	height = 660 - margin.top - margin.bottom;
     
     var svg = d3.select("#display-container")
         .append("svg")
@@ -118,98 +115,135 @@ function clickableTree(data){
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
-    var i = 0;
+
     var duration = 750;
-
-    // var tree = d3.tree().size([height, width]);
-    
-    // var stratify = d3.stratify()
-    //     .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
-
-    // var root = stratify(data)
-    //     .sort(function(a, b) { return (a.height - b.height) || a.id.localeCompare(b.id); });
-    // root.x0 = height/2;
-    // root.y0 = 0;
-    // console.log(root);
-
+    var node_g = svg.append("g");
     var color = d3.scaleOrdinal(d3.schemeCategory10);
-	var tree = d3.tree().size([height, width]);
-    
+
+    //instantiate tree
+    var tree = d3.tree().size([height, width]);
+    //instantiate stratify
     var stratify = d3.stratify()
         .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
-
+    
+    //calcualte root
     var root = stratify(data)
+        // .sum(function(d){return d.ave; })// will generate .value property for each node
         .sort(function(a, b) { return (a.height - b.height) || a.id.localeCompare(b.id); });
+    
+    //root node, with the following properties
+    //children: array
+    //data: object
+    //depth: num
+    //height: num
+    //id: str
+    //parent: object or null
+    // console.log(root);
+    //for example
+    // console.log(root.sum(function(d){
+    //     console.log(d);
+    //     return d.ave; 
+    // }));
+
+ 
     update(root);
-    console.log(root);
-
+    
     function update(source){
-        console.log(source);
-        console.log(tree(source).descendants());
+        //clean up the existing .node elements
+        d3.select("#display-container").selectAll(".node").remove();
+        d3.select("#display-container").selectAll(".link").remove();
 
-        var node_g = svg.append("g");
+        //re-do everyting based on the new root data
+        var links = node_g.selectAll(".link")
+            .data(tree(source).descendants().slice(1));
+        
+        var link = links.enter()
+            .append("path")
+            .attr("class", "link")
+            // .attr("stroke", "gray")
+            .attr("fill", "transparent")
+            .attr("opacity", 0.2)
+            .attr("d", function(d){
+                return "M" + d.y + "," + d.x
+                + "C" + (d.y + d.parent.y) / 2 + "," + d.x
+                + " " + (d.y + d.parent.y) / 2 + "," + d.parent.x
+                + " " + d.parent.y + "," + d.parent.x;
+            });
 
+        
         var nodes = node_g.selectAll(".node")
             .data(tree(source).descendants());
 
-        console.log(nodes);
-
         var node = nodes.enter()
             .append("g")
-            .merge(nodes)
             .attr("class", "node")
-            .attr("transform", function(d){return "translate(" + d.y + "," + d.x + ")"; });
-        console.log(node);
+            .attr("transform", "translate(0, 310)");
+
         var circles = node.append("circle")
             .attr("r", 20.5)
             .style("fill", "transparent") //if use "none", will not be able to click inside the circle
-            .attr("stroke", function(d){ return color(d.depth >=1 && d.id.split(".", 2)); })
+            .attr("stroke", function(d){return "gray"; })
             .on("click", click);
         
-        nodes.exit().remove();
+        
+        var lables = node.append("text")
+            .style("text-anchor", "start")
+            .style("font-size", 35)
+            .style("opacity", 0)
+            .style("pointer-events", "none")
+            .text(function(d){return d.data.id.substring(d.data.id.lastIndexOf(".")+1); });
+        
+        // will animate location changes
+        node.transition()
+            // .delay(function(d){return d.depth*1000; })
+            // .duration(750)
+            // .attr("transform", function(d){
+            //     // console.log(d);
+            //     return d.parent ? "translate(" + d.parent.y + "," + d.parent.x + ")" : "translate(" + d.y + "," + d.x + ")"; 
+            // })
+            .delay(function(d){return d.depth*750; })
+            .duration(1000)
+            .attr("transform", function(d){return "translate(" + d.y + "," + d.x + ")"; });
+
+        link.transition()
+            .delay(750)
+            .duration(function(d){return d.depth*1200; })
+            // .attr()
+            .attr("stroke", function(d){return color(d.depth >=1 && d.data.id.split(".", 2))})
+            .attr("stroke-width", function(d){
+                //console.log(d);
+                return (d.data.value)/10; })
+            ;
+
+        
+        circles.transition()
+            //animate color changes
+            .delay(function(d){return d.depth>0 ? d.depth*1000 : 750; })
+            .attr("stroke", function(d){
+                return color(d.depth >=1 && d.data.id.split(".", 2));
+            })
+            //animate sizes
+            .delay(function(d){return 750; })
+            .duration(function(d){return d.depth>0 ? d.depth*1000 : 750; })
+            .attr("r", function(d){return d.data.ave; });
+        
+        lables.transition()
+            .delay(function(d){return d.depth>0 ? d.depth*1000 : 750; })
+            .duration(750)
+            .style("opacity", 0.9);
     }   
 
-    // function update(source){
-    //     console.log(source); //calculate depth and height related information
-    //     console.log(tree(source)); //calculate (x,y) coordicates for each data point
-    //     console.log(tree(source).descendants());//extract children array as input for data() 
-    //     var node_g = svg.append("g"); //all nodes container
-
-    //     //data join with node-->g elements
-    //     var nodes = node_g.selectAll(".node")
-    //         .data(tree(source).descendants())
-    //         .enter()
-    //         .append("g")
-    //         .attr("class", "node")
-    //         .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
-
-       
-
-    //     //update node, append circles to gs
-    //     var circles = nodes.append("circle")
-    //         .attr("r", 4.5)//default radius value
-    //         .on("click", click);
-        
-    //     //update circles
-    //     circles.attr("stroke", function(d){return color(d.depth >= 1 && d.id.split(".", 2)); })
-    //         .style("fill", "transparent")//use style to overwrite css styles
-    //         .attr("r", function(d){return d.data.ave; });
-        
-    //     // nodes.merge(nodes);
-
-    //     nodes.exit().remove();
-    // }
-
+    //this generate a new root, a good way to zoom in for large data set
     function click(d){
-        // if(d.children){
-        //     d._children = d.children;
-        //     d.children = null;
-        // }else{
-        //     d.children = d._children;
-        //     d._children = null;
-        // }
-        update(d);
+        //node.copy will retunr a deep copy of a new root
+        _root = d.copy();
+        // console.log(_root);
+        update(_root);
+    }
+
+    //to expand and collapse the tree
+    function _click(d){
+
     }
     
 }
