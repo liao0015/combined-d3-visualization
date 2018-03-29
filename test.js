@@ -1,62 +1,72 @@
 var a = [1,2,3,4,5];
-
+var b = ['a', 'b', 'c', 'd', 'e'];
+var c = ['A', 'B', 'C', 'D', 'E', "F", "G"];
 //append containers in
-var svg = d3.select("#test-container").append("svg");
-svg.attr("width", 960).attr("height", 960);
-console.log(svg);
-var ng = svg.append("g");
-console.log(ng);
+var svg = d3.select("#test-container")
+    .append("svg")
+        .attr("width", 160).attr("height", 160); //returns svg
 
-//specify circle attr here
-// var mycircle = {
+var mydom = d3.select("#test-container")
+    .append("div") //returns div element
+        .attr("class", "box")
+        .style("width", "600px")
+        .style("height", "600px")
+        .style("border", "1px solid green")
+    .append("ul") //returns ul element
+        .attr("class", "list-box")
+        .style("border", "1px solid orange");
 
-// }
+//console.log(mydom.selectAll("div")); //SELECTION _groups(), empty NodeList[]
+var ele = d3.select(".list-box").selectAll("li").data(a);  //DATA JOIN _groups() -> _enter()
 
-//Data join
-//group.selection.data() will bind data to non-exiting elements
-//_enter and _exit arrays are available at this step
-//everything is still abstract with no solid elements being appended to the container yet
-//when you do selectAll("circle"), these are circle concepts which do not exist
-var circleList = ng.selectAll("circle").data(a);
-console.log(circleList);
+var new_ele = ele.enter()
+    .append("li"); //ENTER new ele in _groups()
 
-//add new "circle" elements based on joined data using enter()
-// var circles = circleList.enter().append("circle");
-var circles = ng.append("circle");
-circles.attr("cx", function(d){return d*40;});
-circles.attr("cy", function(d, i){return i*40;});
-circles.attr("r", 20);
-console.log(circles);
+var apple = new_ele.append("p") 
+        .text(function(d){return d; }); // UPDATE new ele
 
-var b = [1,2,3,4,5,6,7,8];
+var foo = new_ele.selectAll("li").data(b).enter()
+    .append("span")
+        .text(function(d){return d; });
 
-var c = [4,5,6];
-var d = ['a', 'b', 'c', 'd'];
+//one way of doing this
+// new_ele.each(function(d, i){
+//     // console.log(i);
+//     d3.select(this)
+//         .append("span")
+//             .text(c[i]);
+// });
 
-//perform data join with new data on the same "circle" elements
-//However, using either c or d array will only change the elements, NOT the data already bound
-var newList = ng.selectAll("circle").data(c);
-//remove surplus elements
-// newList.exit().remove();
-// console.log(newList);
+//another way of doing the same
+// new_ele.append("span").text(function(d, i){ return c[i]; });
 
-//to update the binding data, update the attr values with the new data
-newList.attr("cx", function(d){return d*40; });
+//this will append new data correctly
+var orange = new_ele.data(c).enter()
+    .merge(new_ele)
+    .append("p")
+        .attr("class", "letters")
+        .text(function(d){return d; });
 
-//update graph function that takes data as argument in d3 v4
-function update(selection){
-    //remove surplus elements
-    selection.exit().remove();
+var old_ele = new_ele.exit().append("p")
+    .text("old");
 
-    //Add new elements and update existing and new elements
-    selection.enter()
-        .append("circle")
-        .merge(selection)
-        .attr("r", function(d){return d*10; })
-        .attr("fill", "none")
-        .attr("stroke", "orange");
-}
+//we can use selection and css to identify unmatched elements
+var extras = d3.select(".list-box").selectAll('.letters');
+extras.each(function(){
+    // console.log(this.parentNode);
+    if(this.parentNode.nodeName === 'UL'){
+        d3.select(this)
+            .attr("class", "outlier")
+            .style("color", "red");
+    }
+});
+// console.log(svg);
+// console.log(mydom);
+console.log(ele);
+console.log(new_ele);
+console.log(old_ele);
+console.log(foo);
+console.log(extras);
+// console.log(mydom.node()); //retrieve the node element from current selection
 
-update(newList);
-update(circleList);
-update(circles);
+

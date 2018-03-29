@@ -56,12 +56,23 @@
                             <a class="dropdown-item" value="fullchart">Full chart</a>
                             <a class="dropdown-item" value="treechart">Tree chart</a>
                             <a class="dropdown-item" value="clickabletree">Clickable Tree</a>
+                            <a class="dropdown-item" value="collapsibletree">Collapsible Tree</a>
                         </div>
                     </div>
                 </div>
 
+                <!-- hierarchy menu -->
+                <aside class="menu" id="hierarchy-menu-container">
+                    <p class="menu-label">Hierarchy control</p>
+                    <ul class="menu-list">
+                        <!-- <li><a>Level one</a></li>
+                        <li><a>Level two</a></li>
+                        <li><a>Level three</a></li> -->
+                    </ul>
+                </aside>
+
                 <!-- hierarchy checkbox list -->
-                <div id="hierarchy-checkbox" style="padding: 20px;">
+                <!-- <div id="hierarchy-checkbox" style="padding: 20px;">
                     <div class="field">
                         <div class="control hierarchy-item">
                             <label class="checkbox" id="checkbox-root" value="checkbox-root">
@@ -94,12 +105,12 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- height slider -->
                 <div>
                     <div class="slidecontainer">
-                        <input autocomplete="off" type="range" min="660" max="960" value="680" class="slider" id="heightRange" step="20"/>
+                        <input type="range" min="660" max="960" value="680" class="slider" id="heightRange" step="20"/>
                     </div>
                     <div id="height-slider-output"></div>
                 </div>
@@ -120,13 +131,13 @@
     </section>
 
     <!-- zoom in and comparison section -->
-    <section class="section">
+    <!-- <section class="section">
         <div id="joy" style="display: inline-block;"></div>
         <div style="margin: 40px; padding: 40px;">
             <div style="background-color: orange; padding: 20px; border-radius:10px;">click a chart above to compare</div>
         </div>
         <div id="peace"></div>
-    </section>
+    </section> -->
 
 	<!-- Footer section -->
 	<section class="footer is-info">
@@ -147,6 +158,5 @@
     <script src="actions.js"></script>
     <script src="index.js"></script>
     <script src="tree.js"></script>
-    <script src="test.js"></script>
 </body>
 </html>

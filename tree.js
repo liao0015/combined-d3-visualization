@@ -116,7 +116,6 @@ function clickableTree(data, width, height, margin){
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var duration = 750;
     var node_g = svg.append("g");
     var color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -145,13 +144,35 @@ function clickableTree(data, width, height, margin){
     //     return d.ave; 
     // }));
 
- 
     update(root);
-    
+
     function update(source){
+
         //clean up the existing .node elements
         d3.select("#display-container").selectAll(".node").remove();
         d3.select("#display-container").selectAll(".link").remove();
+        
+        //generate hierarchy menu based on data depth
+        var listWrapper = d3.select("#hierarchy-menu-container ul");
+
+        console.log(source.height);
+        var menu_data = [];
+        for (var i = 0; i < source.height + 1; i++){
+            menu_data.push("level " + i);
+        }
+        console.log(menu_data);
+        
+        //this is the only working version
+        //.merge(list) will leave an empty <li> every time updated
+        var list = d3.select("#hierarchy-menu-container ul").selectAll("li")
+            .data(menu_data);
+
+        list.enter()
+            .append("li")
+            .append("a")
+            .text(function(d){return d;});
+        list.exit().remove();
+        
 
         //re-do everyting based on the new root data
         var links = node_g.selectAll(".link")
@@ -169,16 +190,16 @@ function clickableTree(data, width, height, margin){
                 + " " + (d.y + d.parent.y) / 2 + "," + d.parent.x
                 + " " + d.parent.y + "," + d.parent.x;
             });
-
+    
         
         var nodes = node_g.selectAll(".node")
             .data(tree(source).descendants());
-
+    
         var node = nodes.enter()
             .append("g")
             .attr("class", "node")
             .attr("transform", "translate(0, 310)");
-
+    
         var circles = node.append("circle")
             .attr("r", 20.5)
             .style("fill", "transparent") //if use "none", will not be able to click inside the circle
@@ -204,7 +225,7 @@ function clickableTree(data, width, height, margin){
             .delay(function(d){return d.depth*750; })
             .duration(1000)
             .attr("transform", function(d){return "translate(" + d.y + "," + d.x + ")"; });
-
+    
         link.transition()
             .delay(750)
             .duration(function(d){return d.depth*1200; })
@@ -214,7 +235,7 @@ function clickableTree(data, width, height, margin){
                 //console.log(d);
                 return (d.data.value)/10; })
             ;
-
+    
         
         circles.transition()
             //animate color changes
@@ -232,19 +253,26 @@ function clickableTree(data, width, height, margin){
             .duration(750)
             .style("opacity", 0.9);
     }   
-
+    
     //this generate a new root, a good way to zoom in for large data set
     function click(d){
-        //node.copy will retunr a deep copy of a new root
-        _root = d.copy();
-        // console.log(_root);
-        update(_root);
-    }
-
-    //to expand and collapse the tree
-    function _click(d){
-
+        //check if the clicked node is the current root node
+        if(d.parent){
+            //node.copy will retunr a deep copy of a new root
+            var _root = d.copy();
+            // console.log(_root);
+            update(_root);
+        }else{
+            //reload data and start over
+            init();
+        }
     }
     
+    //to expand and collapse the tree
+    function _click(d){
+    
+    }
+    
+
 }
 
